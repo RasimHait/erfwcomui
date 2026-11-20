@@ -113,13 +113,15 @@ body {
 
 /* Состояние */
 
+/* Индикатор стоит строго по центру средней строки сетки, текст под ним растёт вниз
+   и не сдвигает индикатор, сколько бы строк ни занял. */
 .status {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 32px 28px 48px;
+    display: grid;
+    grid-template-rows: 2fr auto 3fr;
+    justify-items: center;
+    min-height: 0;
+    padding: 0 28px;
     text-align: center;
 }
 
@@ -132,9 +134,9 @@ body {
 }
 
 .indicator {
+    grid-row: 2;
     width: 132px;
     height: 132px;
-    margin-bottom: 28px;
     color: var(--tone);
     transition: color 400ms ease;
 }
@@ -184,6 +186,9 @@ body {
 }
 
 .status-copy {
+    grid-row: 3;
+    align-self: start;
+    padding-top: 28px;
     transition: opacity 180ms ease;
 }
 
