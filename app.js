@@ -61,6 +61,7 @@
     let applying = null;
     let applyTimer = 0;
     let applyFailed = false;
+    const byName = new Intl.Collator('ru', { sensitivity: 'base', numeric: true });
     let armed = null;
     let armTimer = 0;
     const trashIcon = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5h10M5.5 3.5V2h3v1.5M3.5 3.5l.6 8.5h5.8l.6-8.5M6 6v4M8 6v4" /></svg>';
@@ -79,7 +80,8 @@
 
         profilesCharacter.textContent = applyFailed ? 'Аддон не принял профиль' : profiles.character;
         profilesCharacter.toggleAttribute('data-error', applyFailed);
-        profilesList.replaceChildren(...profiles.profiles.map(profile => {
+        const sorted = [...profiles.profiles].sort((a, b) => byName.compare(a.name, b.name) || a.id.localeCompare(b.id));
+        profilesList.replaceChildren(...sorted.map(profile => {
             const item = document.createElement('li');
             const button = document.createElement('button');
             const name = document.createElement('span');
@@ -111,7 +113,7 @@
             remove.title = label;
             remove.setAttribute('aria-label', label);
 
-            item.append(button, remove);
+            item.append(remove, button);
             return item;
         }));
     }
