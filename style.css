@@ -210,6 +210,138 @@ body {
     display: none;
 }
 
+.profiles {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    max-height: 188px;
+    margin: 0 16px 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--dusk);
+    overflow: hidden;
+}
+
+.profiles[hidden] {
+    display: none;
+}
+
+.profiles-head {
+    flex: none;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px 8px;
+    border-bottom: 1px solid var(--line);
+}
+
+.profiles-title {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.profiles-character {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 12px;
+    color: var(--fog);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.profiles-character[data-error] {
+    color: var(--rose);
+}
+
+.profiles-list {
+    min-height: 0;
+    padding: 4px;
+    list-style: none;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+}
+
+.profile {
+    display: grid;
+    grid-template-columns: 8px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--ash);
+    font: inherit;
+    text-align: left;
+    transition: background-color 120ms;
+}
+
+.profile::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border: 1.5px solid var(--fog);
+    border-radius: 50%;
+    opacity: 0.5;
+}
+
+.profile:hover:not([aria-current="true"]):not(:disabled) {
+    background: var(--hover);
+}
+
+.profile:focus-visible {
+    outline: 2px solid var(--verdigris);
+    outline-offset: -2px;
+}
+
+.profile[aria-current="true"]::before {
+    border-color: var(--verdigris);
+    background: var(--verdigris);
+    opacity: 1;
+}
+
+.profile:disabled:not([aria-current="true"]) {
+    opacity: 0.55;
+}
+
+.profile-name {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.profile-meta {
+    font-size: 12px;
+    color: var(--fog);
+    white-space: nowrap;
+}
+
+.profile[aria-current="true"] .profile-meta {
+    color: var(--verdigris);
+}
+
+.profile[data-applying] .profile-meta {
+    color: var(--amber);
+}
+
+.profile:not([aria-current="true"]):not([data-applying]):hover .profile-meta {
+    color: var(--ash);
+}
+
+body:has(.profiles:not([hidden])) .indicator {
+    width: 96px;
+    height: 96px;
+}
+
+body:has(.profiles:not([hidden])) .status-copy {
+    padding-top: 16px;
+}
+
 .actions {
     flex: none;
     padding: 0 16px 16px;

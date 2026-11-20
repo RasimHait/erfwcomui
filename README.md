@@ -12,5 +12,13 @@
   - `erfw.minimize()`, `erfw.close()` — свернуть и закрыть окно.
 
   Сообщения в обе стороны — JSON: `{ type, data }`, запрос `{ type, data, id }`, ответ `{ replyTo, data }` или `{ replyTo, error }`.
+
+  Сообщения приложения:
+  - `status` — `{ state, text, detail }`, состояние подключения;
+  - `trpProfiles` — `{ character, current, profiles: [{ id, name, updated }] }`, профили TRP текущего персонажа.
+
+  Запросы страницы:
+  - `runTestCode` — выполнить тестовый код, ответ `true`, если код ушёл в аддон;
+  - `trpApply` — `id` профиля, ответ `true`, если профиль ушёл в аддон.
 - `dictionaries/` — словари Hunspell для проверки орфографии. Приложение скачивает их при запуске
   и перекачивает файлы, у которых изменился размер.

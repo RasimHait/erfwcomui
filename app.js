@@ -31,6 +31,7 @@
         const nextDetail = next.detail ?? '';
 
         status.dataset.state = state;
+        renderProfiles();
         document.title = nextText ? `${nextText} | ERFW Companion` : 'ERFW Companion';
 
         if (text.textContent === nextText && detail.textContent === nextDetail) return;
@@ -51,6 +52,82 @@
     }
 
     erfw.on('status', setStatus);
+
+    const profilesPanel = document.getElementById('profiles');
+    const profilesList = document.getElementById('profiles-list');
+    const profilesCharacter = document.getElementById('profiles-character');
+    const dateFormat = new Intl.DateTimeFormat('ru', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    let profiles = null;
+    let applying = null;
+    let applyTimer = 0;
+    let applyFailed = false;
+
+    function profileMeta(profile) {
+        if (profile.id === profiles.current) return 'Активен';
+        if (profile.id === applying) return 'Применяем…';
+        const updated = new Date(profile.updated);
+        return Number.isNaN(updated.getTime()) ? 'Применить' : dateFormat.format(updated);
+    }
+
+    function renderProfiles() {
+        const visible = status.dataset.state === 'connected' && profiles?.profiles?.length > 0;
+        profilesPanel.hidden = !visible;
+        if (!visible) return;
+
+        profilesCharacter.textContent = applyFailed ? 'Аддон не принял профиль' : profiles.character;
+        profilesCharacter.toggleAttribute('data-error', applyFailed);
+        profilesList.replaceChildren(...profiles.profiles.map(profile => {
+            const item = document.createElement('li');
+            const button = document.createElement('button');
+            const name = document.createElement('span');
+            const meta = document.createElement('span');
+            const current = profile.id === profiles.current;
+
+            button.type = 'button';
+            button.className = 'profile';
+            button.dataset.id = profile.id;
+            button.setAttribute('aria-current', String(current));
+            button.disabled = current || applying !== null;
+            if (profile.id === applying) button.dataset.applying = '';
+            button.title = current ? 'Этот профиль сейчас в игре' : 'Сделать профилем персонажа';
+            name.className = 'profile-name';
+            name.textContent = profile.name;
+            meta.className = 'profile-meta';
+            meta.textContent = profileMeta(profile);
+
+            button.append(name, meta);
+            item.append(button);
+            return item;
+        }));
+    }
+
+    function finishApplying(failed) {
+        clearTimeout(applyTimer);
+        applying = null;
+        applyFailed = failed;
+        renderProfiles();
+    }
+
+    erfw.on('trpProfiles', data => {
+        profiles = data;
+        finishApplying(false);
+    });
+
+    profilesList.addEventListener('click', async event => {
+        const button = event.target.closest('.profile');
+        if (!button || button.disabled) return;
+
+        applying = button.dataset.id;
+        applyFailed = false;
+        renderProfiles();
+        applyTimer = setTimeout(() => finishApplying(true), 8000);
+        try {
+            if (!await erfw.request('trpApply', applying, 15000)) finishApplying(true);
+        } catch (error) {
+            console.error(error);
+            finishApplying(true);
+        }
+    });
 
     document.getElementById('minimize').addEventListener('click', () => erfw.minimize());
     document.getElementById('close').addEventListener('click', () => erfw.close());
@@ -79,6 +156,15 @@
         { state: 'connected', text: 'Подключено к игре', detail: 'Аддон отвечает, проверка орфографии работает.' },
         { state: 'error', text: 'Аддон не отвечает', detail: 'Убедитесь, что !EFW_Companion включён, и выполните /reload.' },
     ];
+    profiles = {
+        character: 'Доукс-Darkmoon',
+        current: 'a',
+        profiles: [
+            { id: 'a', name: 'Доукс', updated: new Date().toISOString() },
+            { id: 'b', name: 'Доукс в маске', updated: new Date(Date.now() - 864e5).toISOString() },
+            { id: 'c', name: 'Тренировочный', updated: new Date(Date.now() - 6048e5).toISOString() },
+        ],
+    };
     let step = 0;
     setStatus(demo[0]);
     setInterval(() => setStatus(demo[++step % demo.length]), 3500);
