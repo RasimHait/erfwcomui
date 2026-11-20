@@ -1,16 +1,3 @@
-// Мост между страницей и приложением ERFW Companion (C#).
-//
-//   erfw.on(type, handler)          подписка на сообщения приложения; возвращает функцию отписки.
-//                                   Если приложение ждёт ответ, возвращённое значение (или Promise) уйдёт обратно.
-//   erfw.send(type, data)           сообщение приложению без ответа.
-//   erfw.request(type, data, ms)    запрос к приложению; Promise с ответом обработчика из C#.
-//   erfw.hosted                     true, если страница открыта внутри приложения.
-//   erfw.minimize(), erfw.close()   свернуть и закрыть окно.
-//
-// Формат сообщений (JSON) в обе стороны:
-//   { type, data }                  обычное сообщение
-//   { type, data, id }              запрос, ждёт ответа
-//   { replyTo, data } | { replyTo, error }   ответ на запрос
 (() => {
     'use strict';
 
@@ -97,7 +84,6 @@
         close: () => window.erfwWindow?.close(),
     });
 
-    // Приложение копит сообщения, пока страница не скажет, что готова.
     const ready = () => send('ready');
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready, { once: true });
     else ready();

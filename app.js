@@ -10,7 +10,6 @@
     const detail = document.getElementById('status-detail');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    // штрихи индикатора
     const ticks = document.getElementById('ticks');
     for (let i = 0; i < TICKS; i++) {
         const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
@@ -26,7 +25,6 @@
 
     let changeTimer = 0;
 
-    // { state: 'waiting' | 'connected' | 'error', text, detail }
     function setStatus(next = {}) {
         const state = STATES.has(next.state) ? next.state : 'waiting';
         const nextText = next.text ?? '';
@@ -62,7 +60,6 @@
         return;
     }
 
-    // Страница открыта в обычном браузере: показываем все состояния по кругу.
     document.getElementById('preview-note').hidden = false;
     const demo = [
         { state: 'waiting', text: 'Ожидание World of Warcraft', detail: 'Запустите игру, компаньон подключится сам.' },
