@@ -55,6 +55,19 @@
     document.getElementById('minimize').addEventListener('click', () => erfw.minimize());
     document.getElementById('close').addEventListener('click', () => erfw.close());
 
+    const runTest = document.getElementById('run-test');
+    runTest.addEventListener('click', async () => {
+        runTest.disabled = true;
+        try {
+            const sent = await erfw.request('runTestCode');
+            if (!sent) console.warn('Код не отправлен: аддон не подключён');
+        } catch (error) {
+            console.error(error);
+        } finally {
+            runTest.disabled = false;
+        }
+    });
+
     if (erfw.hosted) {
         setStatus({ state: 'waiting', text: 'Запуск' });
         return;
