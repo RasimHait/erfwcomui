@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <title>ERFW Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <script src="bridge.js"></script>
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <header class="titlebar">
+        <div class="brand">
+            <svg class="brand-mark" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M8 1.5 14.5 8 8 14.5 1.5 8Z" />
+                <circle cx="8" cy="8" r="1.75" />
+            </svg>
+            <span>ERFW Companion</span>
+        </div>
+        <div class="window-controls">
+            <button class="control" id="minimize" type="button" aria-label="Свернуть" title="Свернуть">
+                <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8" /></svg>
+            </button>
+            <button class="control control-close" id="close" type="button" aria-label="Закрыть" title="Закрыть">
+                <svg viewBox="0 0 10 10" aria-hidden="true"><path d="m1.5 1.5 7 7m0-7-7 7" /></svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="status" id="status" data-state="waiting">
+        <svg class="indicator" viewBox="0 0 120 120" aria-hidden="true">
+            <g id="ticks"></g>
+            <path class="mark mark-check" d="M44 61.5 55 72l21-24" />
+            <path class="mark mark-cross" d="m48 48 24 24m0-24L48 72" />
+        </svg>
+        <div class="status-copy" aria-live="polite">
+            <h1 class="status-text" id="status-text">Запуск</h1>
+            <p class="status-detail" id="status-detail"></p>
+        </div>
+    </main>
+
+    <p class="preview-note" id="preview-note" hidden>Предпросмотр в браузере: состояния переключаются сами</p>
+</body>
+</html>

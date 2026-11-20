@@ -1,0 +1,239 @@
+:root {
+    --night: #1b1f26;
+    --dusk: #222730;
+    --line: #2e343e;
+    --hover: #2c323c;
+    --ash: #e4e1da;
+    --fog: #8a909b;
+    --verdigris: #7fa39a;
+    --amber: #c4a574;
+    --rose: #c1817f;
+
+    --tone: var(--amber);
+
+    font-family: "Onest", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+    font-size: 16px;
+    color: var(--ash);
+    background: var(--night);
+    -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* Заголовок окна */
+
+.titlebar {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    padding-left: 14px;
+    background: var(--dusk);
+    border-bottom: 1px solid var(--line);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--fog);
+}
+
+.brand-mark {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: var(--verdigris);
+    stroke-width: 1.5;
+}
+
+.brand-mark circle {
+    fill: var(--verdigris);
+    stroke: none;
+}
+
+.window-controls {
+    display: flex;
+    align-self: stretch;
+}
+
+.control {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    border: 0;
+    background: transparent;
+    color: var(--fog);
+    transition: background-color 120ms, color 120ms;
+}
+
+.control svg {
+    width: 10px;
+    height: 10px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    stroke-linecap: round;
+}
+
+.control:hover {
+    background: var(--hover);
+    color: var(--ash);
+}
+
+.control-close:hover {
+    background: var(--rose);
+    color: var(--night);
+}
+
+.control:focus-visible {
+    outline: 2px solid var(--verdigris);
+    outline-offset: -2px;
+}
+
+/* Состояние */
+
+.status {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 28px 48px;
+    text-align: center;
+}
+
+.status[data-state="connected"] {
+    --tone: var(--verdigris);
+}
+
+.status[data-state="error"] {
+    --tone: var(--rose);
+}
+
+.indicator {
+    width: 132px;
+    height: 132px;
+    margin-bottom: 28px;
+    color: var(--tone);
+    transition: color 400ms ease;
+}
+
+.tick {
+    stroke: currentColor;
+    stroke-width: 3;
+    stroke-linecap: round;
+    opacity: 0.18;
+    transition: opacity 400ms ease calc(var(--i) * 12ms);
+}
+
+/* 24 штриха по кругу, у каждого своя задержка: получается бегущий по кругу хвост */
+.status[data-state="waiting"] .tick {
+    animation: sweep 1.2s linear infinite;
+    animation-delay: calc(var(--i) * 0.05s - 1.2s);
+}
+
+.status[data-state="connected"] .tick {
+    opacity: 0.85;
+}
+
+.status[data-state="error"] .tick {
+    opacity: 0.3;
+}
+
+@keyframes sweep {
+    from { opacity: 1; }
+    to { opacity: 0.12; }
+}
+
+.mark {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 72;
+    stroke-dashoffset: 72;
+    transition: stroke-dashoffset 450ms ease-out;
+}
+
+.status[data-state="connected"] .mark-check,
+.status[data-state="error"] .mark-cross {
+    stroke-dashoffset: 0;
+    transition-delay: 200ms;
+}
+
+.status-copy {
+    transition: opacity 180ms ease;
+}
+
+.status-copy.is-changing {
+    opacity: 0;
+}
+
+.status-text {
+    max-width: 26ch;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-wrap: balance;
+}
+
+.status-detail {
+    max-width: 36ch;
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--fog);
+    text-wrap: pretty;
+}
+
+.status-detail:empty {
+    display: none;
+}
+
+.preview-note {
+    flex: none;
+    padding: 0 20px 16px;
+    font-size: 12px;
+    color: var(--fog);
+    text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .status[data-state="waiting"] .tick {
+        animation: breathe 2.4s ease-in-out infinite;
+        animation-delay: 0s;
+    }
+
+    .tick,
+    .mark,
+    .indicator,
+    .status-copy {
+        transition: none;
+    }
+}
+
+@keyframes breathe {
+    50% { opacity: 0.6; }
+}
