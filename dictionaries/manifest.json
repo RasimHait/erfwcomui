@@ -1,0 +1,44 @@
+{
+    "files": [
+        {
+            "name": "mat_RU.aff",
+            "size": 10,
+            "sha256": "7f6d7c55043d4b09d0a4380720847457b7954048bf1dac70512593006bae8c37"
+        },
+        {
+            "name": "mat_RU.dic",
+            "size": 147556,
+            "sha256": "904aabb93e7128a57abb3035590c4957d797268005f51822efe0462691396e24"
+        },
+        {
+            "name": "ru_RU.aff",
+            "size": 71236,
+            "sha256": "38ce7d4af78e211e9bafe4bf7e3d6a2c420591136cb738ec6648f8fdf6524cd7"
+        },
+        {
+            "name": "ru_RU.dic",
+            "size": 3473191,
+            "sha256": "f6047416a0204adbecf3a451b874ec8a97ee37e2cbc714466ef04d8dbcc0d6fc"
+        },
+        {
+            "name": "slang_RU.aff",
+            "size": 71236,
+            "sha256": "38ce7d4af78e211e9bafe4bf7e3d6a2c420591136cb738ec6648f8fdf6524cd7"
+        },
+        {
+            "name": "slang_RU.dic",
+            "size": 2624,
+            "sha256": "aeb8cfeee2378b22779f5b8686fac8b4cd4ea8be6a8bca5ec4542f29d8871ff2"
+        },
+        {
+            "name": "wow_RU.aff",
+            "size": 71236,
+            "sha256": "38ce7d4af78e211e9bafe4bf7e3d6a2c420591136cb738ec6648f8fdf6524cd7"
+        },
+        {
+            "name": "wow_RU.dic",
+            "size": 2615,
+            "sha256": "abc2695ba3fcd4b1ef14675ffd23e701dceea12590d801bde9ec66aeb1be5f1a"
+        }
+    ]
+}
