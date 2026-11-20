@@ -250,6 +250,58 @@ body {
     white-space: nowrap;
 }
 
+.profile-delete {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--fog);
+    opacity: 0.6;
+    transition: background-color 120ms, color 120ms, opacity 120ms;
+}
+
+.profile-delete svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.profile-delete:hover:not(:disabled),
+.profile-delete:focus-visible {
+    opacity: 1;
+    background: var(--hover);
+    color: var(--ash);
+}
+
+.profile-delete:focus-visible {
+    outline: 2px solid var(--verdigris);
+    outline-offset: -2px;
+}
+
+.profile-delete[data-armed] {
+    opacity: 1;
+    background: var(--rose);
+    color: var(--night);
+}
+
+.profile-delete[data-armed]:hover {
+    background: var(--rose);
+    color: var(--night);
+}
+
+.profile-delete:disabled {
+    opacity: 0;
+    pointer-events: none;
+}
+
 .profiles-character[data-error] {
     color: var(--rose);
 }
@@ -263,7 +315,15 @@ body {
     scrollbar-color: var(--line) transparent;
 }
 
+.profiles-list li {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
 .profile {
+    flex: 1;
+    min-width: 0;
     display: grid;
     grid-template-columns: 8px 1fr auto;
     align-items: center;

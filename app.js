@@ -61,6 +61,9 @@
     let applying = null;
     let applyTimer = 0;
     let applyFailed = false;
+    let armed = null;
+    let armTimer = 0;
+    const trashIcon = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5h10M5.5 3.5V2h3v1.5M3.5 3.5l.6 8.5h5.8l.6-8.5M6 6v4M8 6v4" /></svg>';
 
     function profileMeta(profile) {
         if (profile.id === profiles.current) return 'Активен';
@@ -96,7 +99,19 @@
             meta.textContent = profileMeta(profile);
 
             button.append(name, meta);
-            item.append(button);
+
+            const remove = document.createElement('button');
+            remove.type = 'button';
+            remove.className = 'profile-delete';
+            remove.dataset.id = profile.id;
+            remove.innerHTML = trashIcon;
+            remove.disabled = current || applying !== null;
+            remove.toggleAttribute('data-armed', armed === profile.id);
+            const label = armed === profile.id ? `Нажмите ещё раз, чтобы удалить «${profile.name}»` : `Удалить сохранённую копию «${profile.name}»`;
+            remove.title = label;
+            remove.setAttribute('aria-label', label);
+
+            item.append(button, remove);
             return item;
         }));
     }
@@ -113,7 +128,45 @@
         finishApplying(false);
     });
 
+    function disarm() {
+        clearTimeout(armTimer);
+        armed = null;
+    }
+
+    async function deleteProfile(id) {
+        if (armed !== id) {
+            disarm();
+            armed = id;
+            armTimer = setTimeout(() => {
+                armed = null;
+                renderProfiles();
+            }, 3000);
+            renderProfiles();
+            return;
+        }
+
+        disarm();
+        try {
+            if (erfw.hosted) {
+                await erfw.request('trpDelete', id);
+            } else {
+                profiles = { ...profiles, profiles: profiles.profiles.filter(profile => profile.id !== id) };
+                renderProfiles();
+            }
+        } catch (error) {
+            console.error(error);
+            renderProfiles();
+        }
+    }
+
     profilesList.addEventListener('click', async event => {
+        const remove = event.target.closest('.profile-delete');
+        if (remove) {
+            if (!remove.disabled) await deleteProfile(remove.dataset.id);
+            return;
+        }
+
+        disarm();
         const button = event.target.closest('.profile');
         if (!button || button.disabled) return;
 
